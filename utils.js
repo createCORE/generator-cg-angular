@@ -99,6 +99,7 @@ exports.inject = function(filename,that,module) {
             configFile = path.join(path.dirname(module.file),configFile);
             injectFileRef = path.relative(path.dirname(module.file),filename);
         }
+        injectFileRef = injectFileRef.replace(/\\/g,'/');
         var lineTemplate = _.template(config.template)({filename:injectFileRef});
         exports.addToFile(configFile,lineTemplate,config.marker);
         that.log.writeln(chalk.green(' updating') + ' %s',path.basename(configFile));
@@ -106,6 +107,8 @@ exports.inject = function(filename,that,module) {
 };
 
 exports.injectRoute = function(moduleFile,uirouter,name,route,routeUrl,that){
+
+    routeUrl = routeUrl.replace(/\\/g,'/');
 
     if (uirouter){
         var code = '$stateProvider.state(\''+name+'\', {\n        url: \''+route+'\',\n        templateUrl: \''+routeUrl+'\'\n    });';
